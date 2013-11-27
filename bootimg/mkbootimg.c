@@ -61,12 +61,12 @@ int usage(void)
             "       --kernel <filename>\n"
             "       --ramdisk <filename>\n"
             "       [ --second <2ndbootloader-filename> ]\n"
-            "       [ -t|--type [RTK|NORM] Type of boot img rockchip boot img has another addresess ]\n"
             "       [ --cmdline <kernel-commandline> ]\n"
             "       [ --board <boardname> ]\n"
             "       [ --base <address> ]\n"
             "       [ --pagesize <pagesize> ]\n"
             "       [ --ramdiskaddr <address> ]\n"
+            "       [ -t|--type [RK|NORM] Type of boot.img. RockChip boot img has another addresess ]\n"
             "       -o|--output <filename>\n"
             );
     return 1;
@@ -91,17 +91,6 @@ int write_padding(int fd, unsigned pagesize, unsigned itemsize)
         return -1;
     } else {
         return 0;
-    }
-}
-
-void parseType(const char *typeStr, enum boot_img_type *type, struct boot_img_consts *defs)
-{
-    if(!strcmp("rtk", typeStr) || !strcmp("RTK", typeStr)) {
-        *defs = rtk_consts;
-        *type = BOOT_IMG_TYPE_RTK;
-    } else {
-        *defs = norm_consts;
-        *type = BOOT_IMG_TYPE_NORM;
     }
 }
 
@@ -253,7 +242,7 @@ int main(int argc, char **argv)
     SHA_update(&ctx, &hdr.ramdisk_size, (int)sizeof(hdr.ramdisk_size));
     SHA_update(&ctx, second_data, (int)hdr.second_size);
     SHA_update(&ctx, &hdr.second_size, (int)sizeof(hdr.second_size));
-    if(type == BOOT_IMG_TYPE_RTK) {
+    if(type == BOOT_IMG_TYPE_RK) {
         SHA_update(&ctx, &hdr.tags_addr, sizeof(hdr.tags_addr));
         SHA_update(&ctx, &hdr.page_size, sizeof(hdr.page_size));
         SHA_update(&ctx, &hdr.unused, sizeof(hdr.unused));

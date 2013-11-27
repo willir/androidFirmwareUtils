@@ -18,6 +18,10 @@
 #ifndef _BOOT_IMAGE_H_
 #define _BOOT_IMAGE_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 typedef struct boot_img_hdr boot_img_hdr;
 
 #define BOOT_MAGIC "ANDROID!"
@@ -47,7 +51,7 @@ static const struct boot_img_consts norm_consts = {
     .base             = 0x10000000,
 };
 
-static const struct boot_img_consts rtk_consts = {
+static const struct boot_img_consts rk_consts = {
     .kernel_addr_off  = 0x00408000,
     .ramdisk_addr_off = 0x02000000,
     .second_addr_off  = 0x00F00000,
@@ -59,7 +63,7 @@ static const struct boot_img_consts rtk_consts = {
 
 enum boot_img_type {
     BOOT_IMG_TYPE_NORM,
-    BOOT_IMG_TYPE_RTK,
+    BOOT_IMG_TYPE_RK,
 };
 
 struct boot_img_hdr
@@ -131,4 +135,19 @@ struct ptentry {
 */
 #endif
 
+//SOME GENERAL FUNCTIONS:
+
+static void parseType(const char *typeStr, enum boot_img_type *type, struct boot_img_consts *defs)
+{
+    if(!strcmp("rk", typeStr) || !strcmp("RK", typeStr)) {
+        *defs = rk_consts;
+        *type = BOOT_IMG_TYPE_RK;
+    } else if(!strcmp("norm", typeStr) || !strcmp("NORM", typeStr)){
+        *defs = norm_consts;
+        *type = BOOT_IMG_TYPE_NORM;
+    } else {
+		fprintf(stderr, "Unknown value of --type parameter.\n\n");
+        exit(usage());
+	}
+}
 #endif

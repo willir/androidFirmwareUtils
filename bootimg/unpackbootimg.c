@@ -43,19 +43,8 @@ int usage() {
     printf("\t-i|--input boot.img\n");
     printf("\t[ -o|--output output_directory]\n");
     printf("\t[ -p|--pagesize <size-in-hexadecimal> ]\n");
-    printf("\t[ -t|--type [rtk|norm] Unpack rockChip boot.img (It's has another addresses offset...) ]\n");
+    printf("\t[ -t|--type [RK|NORM] Type of boot.img. RockChip boot img has another addresess ]\n");
     return 0;
-}
-
-void parseType(const char *type_str, enum boot_img_type *type, struct boot_img_consts *defs)
-{
-    if(!strcmp("rtk", type_str) || !strcmp("RTK", type_str)) {
-        *defs = rtk_consts;
-        *type = BOOT_IMG_TYPE_RTK;
-    } else {
-        *defs = norm_consts;
-        *type = BOOT_IMG_TYPE_NORM;
-    }
 }
 
 int main(int argc, char** argv)
